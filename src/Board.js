@@ -116,8 +116,6 @@
       return false;
     },
 
-
-
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
     //
@@ -154,11 +152,45 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      // get starting cell
+      var board = this.attributes;
+      var size = Object.keys(board).length - 1;
+      var currentColumn = Math.min((size - 1), majorDiagonalColumnIndexAtFirstRow);
+      var currentRow = Math.max(currentColumn - (size - 1), 0)
+
+      // use calculation, declare cell as an array 
+      var currentCell = [currentRow, currentColumn];
+      // set flags
+      var flag = false;
+
+      // walk from starting cell
+      // walk until current cell is out of bounds
+      while (this._isInBounds(currentRow, currentColumn)) {
+        // if current cell is a queen, do something based on flag
+        if (board[currentRow][currentColumn] === 1 && flag === false) {
+          flag = true;
+        } else if (board[currentRow][currentColumn] === 1 && flag === true) {
+          return true;
+        }    
+        // continue walking by decrementing coordinates by 1
+        currentRow++;
+        currentColumn++;
+      }
       return false; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      //figure out number of indexes to pass in
+      var maxIndex = (Object.keys(this.attributes).length - 1) * 2;
+
+      //call hasMajor... for each index
+      for (var i = 0; i < maxIndex; i++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {          
+          return true;
+        }
+      }
+
       return false; // fixme
     },
 
@@ -169,11 +201,43 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      // get starting cell
+      var board = this.attributes;
+      var size = Object.keys(board).length - 1;
+      var currentColumn = Math.min(size - 1, minorDiagonalColumnIndexAtFirstRow);
+      var currentRow = Math.max(currentColumn - (size - 1), 0);
+
+      // use calculation, declare cell as an array 
+      var currentCell = [currentRow, currentColumn];
+      // set flags
+      var flag = false;
+
+      // walk from starting cell
+      // walk until current cell is out of bounds
+      while (this._isInBounds(currentRow, currentColumn)) {
+        // if current cell is a queen, do something based on flag
+        if (board[currentRow][currentColumn] === 1 && flag === false) {
+          flag = true;
+        } else if (board[currentRow][currentColumn] === 1 && flag === true) {
+          return true;
+        }    
+        // continue walking by decrementing coordinates by 1
+        currentRow++;
+        currentColumn--;
+      }
       return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      var maxIndex = (Object.keys(this.attributes).length - 1) * 2;
+
+      //call hasMajor... for each index
+      for (var i = 0; i < maxIndex; i++) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
       return false; // fixme
     }
 
