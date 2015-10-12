@@ -77,14 +77,41 @@
     // ROWS - run from left to right
     // --------------------------------------------------------------
     //
+    //Workflow
+    seeBoard: function() {
+      for (var i = 0; i < Object.keys(this.attributes).length; i++) {
+        console.log(this.attributes[i]);
+      }
+    },
+
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
+      //assign a row variable to talk about the row
+      var row = this.get(rowIndex);
+      //initialize a flag to false
+      var flag = false;
+
+      //iterate over the row
+      for (var i = 0; i < row.length; i++) {
+        if (row[i] === 1 && flag === false) {
+          flag = true;
+        } else if (row[i] === 1 && flag) {
+          return true;
+        }
+      }
+      //at the end return the flag
       return false; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.hasRowConflictAt(i)) {
+          return true;
+        }
+      }
+
+      return false;
     },
 
 
