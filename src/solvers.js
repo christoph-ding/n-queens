@@ -98,15 +98,39 @@ window.countNRooksSolutions = function(n) {
       return;    
     }
 
+    // if (rowIndex === n) {
+    //   var checkBoardObj = new Board(boardArray);
+    //   if (!checkBoardObj.hasAnyRooksConflicts()) {
+    //     solutionCount++;
+    //   }
+    //   return;    
+    // }
+
+
     //recursive case:
     //iterate through current row elements
     for (var col = 0; col < n; col++) {
       if (boardArray[rowIndex][col] === 0) {
+        // make a copy of board before making any changes
+        var snapshot = [];
+        for (var i = 0; i < boardArray.length; i++) {
+          snapshot.push(boardArray[i].slice());
+        }
         xOut();
         boardArray[rowIndex][col] = 1;
         //recurse through each row level
         recur(rowIndex + 1,  boardArray);
-        boardArray[rowIndex][col] = 0;
+        boardArray = new Board(snapshot).rows();
+        // boardArray[rowIndex][col] = 0;      
+        // // reset current row elements to 0
+        // for (var col2ndtime = 0; col2ndtime < n; col2ndtime++) {
+        //   boardArray[rowIndex][col2ndtime] = 0;
+        // }
+        // // reset current column elements to 0
+        // for (var i = 0; i<boardArray.length; i++) {
+        //   boardArray[i][col] = 0;
+        // }
+
       }
     }
   };
