@@ -13,10 +13,11 @@
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
-window.findNRooksSolution = function(n) {
+window.findNRooksSolution = function(n, startingCol) {
   // board storage
   var boardObject = new Board({n: n});
   var board = boardObject.rows();
+  var startingCol = startingCol || 0;
 
   // helper functions
   var xOut = function() {
@@ -42,7 +43,7 @@ window.findNRooksSolution = function(n) {
 
   // iterate through board, placing 1s and Xs
   for (var curRow = 0; curRow<n; curRow++) {
-    for (var curCol = 0; curCol<n; curCol++) {
+    for (var curCol = startingCol; curCol<n; curCol++) {
       if (board[curRow][curCol] === 0) {
         // call function that nulls out current col + row  
         xOut();
