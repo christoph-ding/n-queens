@@ -61,10 +61,62 @@ window.findNRooksSolution = function(n, startingCol) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solution = undefined; //fixme
+  var solutionCount = 0;
+  var boardObject = new Board({n: n});
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+
+  //recursive function
+  var recur = function(rowIndex, boardArray) {
+    
+    //helper functions
+    var xOut = function() {
+      // we need to set current row to x
+      for (var i = 0; i<boardArray.length; i++) {
+        boardArray[i][col] = 'x';
+      }
+    };
+    var replaceX = function() {
+      for (var xOutRow = 0; xOutRow<n; xOutRow++) {
+        for (var xOutCol = 0; xOutCol<n; xOutCol++) {
+          if (checkBoard[xOutRow][xOutCol] === 'x') {
+            checkBoard[xOutRow][xOutCol] = 0;
+          }
+        }
+      }
+    };
+    //base case
+    if (rowIndex === n) {
+      var checkBoard = [];
+      for (var i = 0; i < boardArray.length; i++) {
+        checkBoard.push(boardArray[i].slice());
+      }
+      replaceX();
+      var checkBoardObj = new Board(checkBoard);
+      if (!checkBoardObj.hasAnyRooksConflicts()) {
+        solutionCount++;
+      }
+      return;    
+    }
+
+    //recursive case:
+    //iterate through current row elements
+    for (var col = 0; col < n; col++) {
+      if (boardArray[rowIndex][col] === 0) {
+        xOut();
+        boardArray[rowIndex][col] = 1;
+        //recurse through each row level
+        recur(rowIndex + 1,  boardArray);
+        boardArray[rowIndex][col] = 0;
+      }
+    }
+  };
+
+  recur(0, boardObject.rows());
   return solutionCount;
+  //return recursive function
+
+  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  // return solutionCount;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
