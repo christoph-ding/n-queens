@@ -155,8 +155,8 @@
       // get starting cell
       var board = this.attributes;
       var size = Object.keys(board).length - 1;
-      var currentColumn = Math.min((size - 1), majorDiagonalColumnIndexAtFirstRow);
-      var currentRow = Math.max(currentColumn - (size - 1), 0)
+      var currentColumn = majorDiagonalColumnIndexAtFirstRow < size ? majorDiagonalColumnIndexAtFirstRow : 0;
+      var currentRow = Math.max(majorDiagonalColumnIndexAtFirstRow - (size - 1) , 0);
 
       // use calculation, declare cell as an array 
       var currentCell = [currentRow, currentColumn];
@@ -205,10 +205,8 @@
       var board = this.attributes;
       var size = Object.keys(board).length - 1;
       var currentColumn = Math.min(size - 1, minorDiagonalColumnIndexAtFirstRow);
-      var currentRow = Math.max(currentColumn - (size - 1), 0);
+      var currentRow = Math.max(minorDiagonalColumnIndexAtFirstRow - currentColumn, 0);
 
-      // use calculation, declare cell as an array 
-      var currentCell = [currentRow, currentColumn];
       // set flags
       var flag = false;
 
@@ -230,7 +228,7 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      var maxIndex = (Object.keys(this.attributes).length - 1) * 2;
+      var maxIndex = (this.attributes.n - 1) * 2;
 
       //call hasMajor... for each index
       for (var i = 0; i < maxIndex; i++) {
