@@ -84,6 +84,7 @@ window.countNRooksSolutions = function(n) {
         }
       }
     };
+    
     //base case
     if (rowIndex === n) {
       var checkBoard = [];
@@ -97,15 +98,6 @@ window.countNRooksSolutions = function(n) {
       }
       return;    
     }
-
-    // if (rowIndex === n) {
-    //   var checkBoardObj = new Board(boardArray);
-    //   if (!checkBoardObj.hasAnyRooksConflicts()) {
-    //     solutionCount++;
-    //   }
-    //   return;    
-    // }
-
 
     //recursive case:
     //iterate through current row elements
@@ -121,15 +113,6 @@ window.countNRooksSolutions = function(n) {
         //recurse through each row level
         recur(rowIndex + 1,  boardArray);
         boardArray = new Board(snapshot).rows();
-        // boardArray[rowIndex][col] = 0;      
-        // // reset current row elements to 0
-        // for (var col2ndtime = 0; col2ndtime < n; col2ndtime++) {
-        //   boardArray[rowIndex][col2ndtime] = 0;
-        // }
-        // // reset current column elements to 0
-        // for (var i = 0; i<boardArray.length; i++) {
-        //   boardArray[i][col] = 0;
-        // }
 
       }
     }
@@ -137,10 +120,6 @@ window.countNRooksSolutions = function(n) {
 
   recur(0, boardObject.rows());
   return solutionCount;
-  //return recursive function
-
-  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  // return solutionCount;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
@@ -176,6 +155,10 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
+  var colFlag = {};
+  for (var i=0; i<n; i++) {
+    colFlag[i] = true;
+  }
   var solutionCount = 0;
   var board = new Board({n:n});
 
@@ -187,12 +170,16 @@ window.countNQueensSolutions = function(n) {
     }
 
     // recursive case
-    for (var column = 0; column < n; column++) {
-      board.togglePiece(rowIndex, column);
-      if (!board.hasAnyQueensConflicts()) {
-        recur(rowIndex + 1);
+    for (var col in colFlag) {
+      if (colFlag[col]) {
+        board.togglePiece(rowIndex, +col);
+        colFlag[col] = false;
+        if (!board.hasAnyQueensConflicts()) {
+          recur(rowIndex + 1);
+        }
+        board.togglePiece(rowIndex, +col);
+        colFlag[col] = true;
       }
-      board.togglePiece(rowIndex, column);
     }
   }
 
